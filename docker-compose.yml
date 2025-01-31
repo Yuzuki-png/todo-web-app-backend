@@ -1,0 +1,34 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:15
+    container_name: task-db
+    restart: always
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: task_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  backend:
+    build:
+      context: .  
+      dockerfile: Dockerfile
+    container_name: task-backend
+    restart: always
+    depends_on:
+      - db
+    environment:
+        DATABASE_URL: postgresql://user:password@task-db:5432/task_db  # ✅ task-db に変更
+    ports:
+      - "3000:3000"  # 修正: NestJS のデフォルトポートを使う
+    volumes:
+      - .:/app  # 必要なら NestJS のソースコードをマウント
+      - /app/node_modules  # ただし node_modules はコンテナ内で管理した方が安定する
+
+volumes:
+  postgres_data:
