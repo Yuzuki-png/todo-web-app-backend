@@ -11,20 +11,19 @@ export class TasksController {
   findAll(): Promise<Task[]> {
     return this.tasksService.findAll();
   }
-  
 
   @Post()
   createTask(@Body() createTaskDto: CreateTaskDto): Promise<Task> {
-    return this.tasksService.createTask(createTaskDto);
+    return this.tasksService.createTask(createTaskDto.text);
   }
 
   @Delete(':id')
-  deleteTask(@Param('id') id: number): Promise<void> {
-    return this.tasksService.deleteTask(id);
+  deleteTask(@Param('id') id: string): Promise<void> {
+    return this.tasksService.deleteTask(parseInt(id, 10));
   }
 
   @Patch(':id/toggle')
-  toggleTask(@Param('id') id: number): Promise<Task> {
-    return this.tasksService.toggleTask(id);
+  toggleTask(@Param('id') id: string): Promise<Task> {
+    return this.tasksService.toggleTask(parseInt(id, 10));
   }
 }

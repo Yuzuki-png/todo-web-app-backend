@@ -15,7 +15,7 @@ COPY . .
 RUN npm run build
 
 # ポートを公開
-EXPOSE 3001
+EXPOSE 3000
 
 # アプリケーションを起動
 CMD ["npm", "run", "start:prod"]
