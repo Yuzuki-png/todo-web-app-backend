@@ -16,19 +16,19 @@ services:
 
   backend:
     build:
-      context: .  
+      context: .
       dockerfile: Dockerfile
     container_name: task-backend
     restart: always
     depends_on:
       - db
     environment:
-        DATABASE_URL: postgresql://user:password@task-db:5432/task_db  # ✅ task-db に変更
+      DATABASE_URL: postgresql://user:password@task-db:5432/task_db
     ports:
-      - "3000:3000"  # 修正: NestJS のデフォルトポートを使う
+      - "4000:3000"
     volumes:
-      - .:/app  # 必要なら NestJS のソースコードをマウント
-      - /app/node_modules  # ただし node_modules はコンテナ内で管理した方が安定する
+      - .:/app
+      - /app/node_modules
 
 volumes:
   postgres_data:

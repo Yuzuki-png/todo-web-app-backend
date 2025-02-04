@@ -1,16 +1,16 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestFastifyApplication>(
-    AppModule,
-    new FastifyAdapter()
-  );
+  const app = await NestFactory.create(AppModule);
 
-  await app.listen(3000, '0.0.0.0');
+  app.enableCors({
+    origin: "http://localhost:3000",
+    methods: "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+    allowedHeaders: "Content-Type, Authorization",
+    credentials: true,
+  });
 
-  const fastifyInstance = app.getHttpAdapter().getInstance();
-  console.log(fastifyInstance.printRoutes());
+  await app.listen(3000, "0.0.0.0");
 }
 bootstrap();
