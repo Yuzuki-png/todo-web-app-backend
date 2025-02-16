@@ -25,7 +25,7 @@ services:
     environment:
       DATABASE_URL: postgresql://user:password@task-db:5432/task_db
     ports:
-      - "4000:3000"
+      - "3001:3000"
     volumes:
       - .:/app
       - /app/node_modules
