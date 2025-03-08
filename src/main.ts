@@ -4,14 +4,12 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // ❌ `CORS` の設定を削除
-  // app.enableCors({
-  //   origin: "http://localhost:3000",
-  //   methods: "GET, POST, PUT, DELETE, PATCH, OPTIONS",
-  //   allowedHeaders: "Content-Type, Authorization",
-  //   credentials: true,
-  // });
+  app.enableCors({
+    origin: 'http://localhost:3001',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+  });
 
-  await app.listen(3000, '0.0.0.0'); // ✅ NestJS を 3001 で起動
+  await app.listen(3000);
 }
 bootstrap();
