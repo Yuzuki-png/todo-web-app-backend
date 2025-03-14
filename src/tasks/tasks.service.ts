@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Task } from './entity/task.entity';
@@ -7,28 +7,42 @@ import { Task } from './entity/task.entity';
 export class TasksService {
   constructor(
     @InjectRepository(Task)
-    private taskRepository: Repository<Task>,
+    private tasksRepository: Repository<Task>,
   ) {}
 
-  async findAll(): Promise<Task[]> {
-    return this.taskRepository.find();
+  findAll(userId: number): Promise<Task[]> {
+    return this.tasksRepository.find({
+      where: { userId },
+      order: { id: 'DESC' },
+    });
   }
 
-  async createTask(text: string): Promise<Task> {
-    const task = this.taskRepository.create({ text, completed: false });
-    return this.taskRepository.save(task);
+  async createTask(text: string, userId: number): Promise<Task> {
+    const task = this.tasksRepository.create({
+      text,
+      userId,
+      completed: false,
+    });
+    return this.tasksRepository.save(task);
   }
 
-  async deleteTask(id: number): Promise<void> {
-    await this.taskRepository.delete(id);
-  }
-
-  async toggleTask(id: number): Promise<Task> {
-    const task = await this.taskRepository.findOne({ where: { id } });
-    if (!task) {
-      throw new Error('Task not found');
+  async deleteTask(id: number, userId: number): Promise<void> {
+    const result = await this.tasksRepository.delete({ id, userId });
+    if (result.affected === 0) {
+      throw new NotFoundException(`Task with ID ${id} not found`);
     }
+  }
+
+  async toggleTask(id: number, userId: number): Promise<Task> {
+    const task = await this.tasksRepository.findOne({
+      where: { id, userId },
+    });
+
+    if (!task) {
+      throw new NotFoundException(`Task with ID ${id} not found`);
+    }
+
     task.completed = !task.completed;
-    return this.taskRepository.save(task);
+    return this.tasksRepository.save(task);
   }
 }
