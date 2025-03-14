@@ -1,21 +1,16 @@
-# ベースイメージ
 FROM node:18-alpine
 
-# 作業ディレクトリを設定
 WORKDIR /app
 
-# 依存関係をインストール
-COPY package.json package-lock.json ./
+COPY package*.json ./
+
+# パッケージのインストール（bcryptのネイティブビルドが不要に）
 RUN npm install
 
-# ソースコードをコピー
 COPY . .
 
 # ビルド
 RUN npm run build
 
-# ポートを公開
-EXPOSE 3000
-
-# アプリケーションを起動
+# 起動コマンド
 CMD ["npm", "run", "start:prod"]
