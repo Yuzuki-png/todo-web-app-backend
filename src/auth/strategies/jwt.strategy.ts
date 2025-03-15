@@ -6,6 +6,15 @@ import { User } from '../entities/user.entity';
 import { PassportStrategy } from '@nestjs/passport';
 import { ConfigService } from '@nestjs/config';
 // src/auth/strategies/jwt.strategy.ts
+
+// JWTペイロードの型を定義
+interface JwtPayload {
+  sub: number;
+  email: string;
+  iat?: number;
+  exp?: number;
+}
+
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(
@@ -21,7 +30,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(payload: any) {
+  async validate(payload: JwtPayload) {
     const user = await this.userRepository.findOne({
       where: { id: payload.sub },
     });

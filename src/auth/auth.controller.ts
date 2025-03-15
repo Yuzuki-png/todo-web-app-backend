@@ -11,6 +11,14 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { LoginDto } from './dto/login.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
+// リクエストユーザー用のインターフェースを定義
+interface RequestWithUser extends Request {
+  user: {
+    id: number;
+    [key: string]: any;
+  };
+}
+
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
@@ -30,7 +38,7 @@ export class AuthController {
   // 認証が必要なエンドポイント（ユーザー情報取得）
   @UseGuards(JwtAuthGuard)
   @Get('me')
-  getProfile(@Request() req) {
+  getProfile(@Request() req: RequestWithUser) {
     return this.authService.getProfile(req.user.id);
   }
 

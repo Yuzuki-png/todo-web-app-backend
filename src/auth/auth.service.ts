@@ -50,7 +50,7 @@ export class AuthService {
 
     await this.userRepository.save(user);
 
-    // パスワードを除外して返す
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password: _, ...result } = user;
     return result;
   }
@@ -88,7 +88,7 @@ export class AuthService {
       throw new UnauthorizedException('ユーザーが見つかりません');
     }
 
-    // パスワードを除外して返す
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, ...result } = user;
     return result;
   }
