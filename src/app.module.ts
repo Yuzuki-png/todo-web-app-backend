@@ -39,7 +39,7 @@ import * as Joi from 'joi';
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
       autoLoadEntities: true,
-      synchronize: process.env.NODE_ENV !== 'production', // 本番環境では無効にする
+      synchronize: false,
     }),
     TasksModule,
     AuthModule,
